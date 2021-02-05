@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  molecule:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pipenv
+
+      - name: Use Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pipenv-
+
+      - name: Install packages
+        run: |
+          pipenv install --dev
+          pipenv run ansible-galaxy install -r requirements.yml
+          pipenv run ansible-galaxy collection install -r requirements.yml
+        working-directory: packer/ansible
+
+      - name: Molecule
+        run: |
+          echo "${{ secrets.VAULT_PASS }}" > /home/runner/work/_temp/.vaultpass
+          ANSIBLE_VAULT_PASSWORD_FILE=/home/runner/work/_temp/.vaultpass make test
+
+  terraform-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.2.1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Init
+        run: terraform init
+        working-directory: terraform
+
+      - name: Format
+        run: terraform fmt -check
+        working-directory: terraform
+
+      - name: Validate
+        run: terraform validate
+        working-directory: terraform
+
+      - name: Plan
+        run: terraform plan
+        working-directory: terraform

@@ -1,0 +1,27 @@
+- name: Prepare
+  hosts: all
+  become: yes
+  gather_facts: false
+
+  vars_files:
+    - ../../vars.yml
+
+  tasks:
+    - name: Install Ansible dependencies
+      ansible.builtin.yum:
+        update_cache: yes
+        name: "{{ prepare_yum_packages }}"
+        state: present
+
+    - name: Create AWS users
+      ansible.builtin.user:
+        name: '{{ item }}'
+        password: "{{ item | password_hash('sha512', 'ansiblesalt') }}"
+        groups:
+          - adm
+          - wheel
+        create_home: yes
+        state: present
+      loop:
+        - ec2-user
+        - ssm-user
