@@ -1,0 +1,26 @@
+- name: Prepare
+  hosts: all
+  become: yes
+  gather_facts: false
+
+  vars_files:
+    - ../../vars.yml
+
+  tasks:
+    - name: Test Nginx Server
+      ansible.builtin.uri:
+        url: http://127.0.0.1:80/
+      register: nginx_uri
+
+    - name: Test Gollum Server
+      ansible.builtin.uri:
+        url: http://127.0.0.1:4567/
+      register: gollum_uri
+
+    - name: Assertions
+      assert:
+        that:
+          - nginx_uri.status == 200
+          - gollum_uri.status == 200
+          - nginx_uri.url is search("\/gollum")
+          - gollum_uri.url is search("\/gollum")
