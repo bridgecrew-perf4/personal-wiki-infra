@@ -1,3 +1,4 @@
+---
 dependency:
   name: galaxy
   options:
@@ -8,6 +9,7 @@ driver:
 lint: |
   set -e
   echo "PWD: "$PWD
+  yamllint .
   ansible-lint
 platforms:
   - name: instance

@@ -4,7 +4,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-molecule = {extras = ["docker", "lint"], version = "*"}
+pre-commit = "*"
+molecule = {extras = ["docker"],version = "*"}
+ansible-lint = "*"
+yamllint = "*"
 
 [packages]
 ansible = "*"

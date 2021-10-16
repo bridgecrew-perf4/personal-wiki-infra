@@ -1,3 +1,4 @@
+---
 - name: Nginx | Setup EPEL
   ansible.builtin.shell:
     cmd: amazon-linux-extras install epel -y && touch /tmp/epel-released
@@ -6,6 +7,7 @@
 - name: Nginx | Install Dependencies
   ansible.builtin.yum:
     name: '{{ certbot_yum_dependencies }}'
+    update_cache: true
     state: present
 
 - name: Nginx | Copy Config

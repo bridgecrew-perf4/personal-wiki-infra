@@ -1,3 +1,4 @@
+---
 - name: Wiki | Create Directory
   ansible.builtin.file:
     path: '{{ wiki_dir_path }}'
@@ -28,7 +29,7 @@
     repo: '{{ wiki_repo }}'
     dest: '{{ wiki_dir_path }}'
     version: 'main'
-    accept_hostkey: yes
+    accept_hostkey: true
     key_file: '{{ ssh_dir.path }}/{{ wiki_deploy_key }}'
   become_user: '{{ wiki_user.name }}'
 
@@ -58,6 +59,6 @@
   ansible.builtin.systemd:
     name: 'gollum.service'
     state: started
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
   register: wiki_service

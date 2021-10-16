@@ -3,3 +3,4 @@
 .terraform.lock.hcl
 packer/ansible/.vaultpass
 packer_cache
+.dccache

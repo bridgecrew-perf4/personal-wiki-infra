@@ -1,3 +1,4 @@
+---
 - name: Gollum | Remove required yum packages
   ansible.builtin.yum:
     name: '{{ gollum_yum_remove_dependencies }}'
@@ -7,7 +8,7 @@
   ansible.builtin.unarchive:
     src: 'https://cmake.org/files/v{{ cmake_version }}/cmake-{{ cmake_version }}.0.tar.gz'
     dest: '/tmp'
-    remote_src: yes
+    remote_src: true
 
 - name: Gollum | Bootstrap cmake - will take some time
   ansible.builtin.shell:
@@ -23,7 +24,7 @@
     creates: '/tmp/cmake-maked'
   async: 1800
 
-- name: Gollum | Install cmake
+- name: Gollum | Install cmake  # noqa command-instead-of-shell
   ansible.builtin.shell:
     cmd: 'make install'
     chdir: '/tmp/cmake-{{ cmake_version }}.0'
@@ -33,7 +34,7 @@
   community.general.gem:
     name: '{{ item }}'
     state: present
-    user_install: no
+    user_install: false
     executable: '{{ gem_executable }}'
   loop: '{{ gollum_gems }}'
   environment:

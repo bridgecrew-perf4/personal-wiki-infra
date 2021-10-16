@@ -1,3 +1,4 @@
+---
 - name: Ruby | Install RVM
   ansible.builtin.import_role:
     name: rvm.ruby

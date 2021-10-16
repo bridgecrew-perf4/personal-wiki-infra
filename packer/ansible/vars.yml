@@ -1,13 +1,15 @@
+---
 wiki_repo: 'git@github.com:artis3n/personal-wiki.git'
 wiki_domain: 'wiki.artis3nal.com'
 git_config:
-  - { name: 'user.name', value: 'Gollum Wiki' }
+  - name: 'user.name'
+    value: 'Gollum Wiki'
 
 wiki_dir_path: '/opt/wiki'
 wiki_deploy_key: 'wiki_deploy_key'
 
-cmake_version: '3.19'
-ruby_version: '2.7.2'
+cmake_version: '3.21'
+ruby_version: '2.7.4'
 
 gollum_gems:
   - gollum
@@ -15,7 +17,7 @@ gollum_gems:
 gollum_yum_remove_dependencies:
   - cmake
 
-yum_dependencies:
+yum_packages:
   - curl
   - gpg
   - procps

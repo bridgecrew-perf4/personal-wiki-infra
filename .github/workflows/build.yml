@@ -43,8 +43,8 @@ jobs:
       - name: Install Library Dependencies
         run: |
           pipenv install --dev
-          pipenv run ansible-galaxy role install --force-with-deps --role-file packer/ansible/requirements.yml
-          pipenv run ansible-galaxy collection install --force-with-deps --requirements-file packer/ansible/requirements.yml
+          pipenv run ansible-galaxy role install --role-file packer/ansible/requirements.yml
+          pipenv run ansible-galaxy collection install --requirements-file packer/ansible/requirements.yml
 
       - name: Packer Build
         run: |
